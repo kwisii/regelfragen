@@ -80,4 +80,4 @@ def process_all_pdfs(directory, output_path):
 if __name__ == "__main__":
     current_directory = os.path.dirname(os.path.abspath(__file__))
     output_file = os.path.join(current_directory, "Regelfragen_Anki.txt")
-    process_all_pdfs(current_directory, output_file)
+    process_all_pdfs(os.path.join(current_directory, "pdfs") , output_file)
