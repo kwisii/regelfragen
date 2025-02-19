@@ -1,0 +1,42 @@
+name: Extract PDF and Deploy Text Files
+
+on:
+  push:
+    branches:
+      - main  # Trigger on push to main branch
+  workflow_dispatch:  # Allow manual runs
+
+jobs:
+  run-extraction:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repository
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Set up Python
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'  # Specify the Python version
+
+      # Install dependencies
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pymupdf
+
+      # Run the extraction script
+      - name: Run PDF Extraction Script
+        run: |
+          python create_anki_set.py
+
+      # Commit and push the generated text file
+      - name: Commit and push extracted files
+        run: |
+          git config --global user.name 'github-actions'
+          git config --global user.email 'github-actions@github.com'
+          git add *.txt
+          git commit -m "Add extracted text files" || echo "No changes to commit"
+          git push
